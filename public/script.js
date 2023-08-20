@@ -21,7 +21,31 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     if (input.value) {
-      socket.emit("chat message", { username, message: input.value });
+      if (input.value.toLocaleLowerCase() == "/help") {
+        alert(`
+          Available Commands:
+          /help - Show this message
+          /random - Print a random number
+          /clear - Clear the chat
+        `);
+      } else if (input.value.toLocaleLowerCase() == "/random") {
+        const li = document.createElement("li");
+        li.classList.add("random");
+        const strong = document.createElement("strong");
+        strong.textContent = username;
+        const message = document.createElement("div");
+        message.textContent = `Your random number is ${Math.floor(
+          Math.random() * 10
+        )}`;
+
+        li.appendChild(strong);
+        li.appendChild(message);
+        messages.appendChild(li);
+      } else if (input.value.toLocaleLowerCase() == "/clear") {
+        messages.innerHTML = "";
+      } else {
+        socket.emit("chat message", { username, message: input.value });
+      }
       input.value = "";
     }
   });
@@ -36,7 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     let outputStr = data.message;
-
     for (const key in textToEmoji) {
       if (textToEmoji.hasOwnProperty(key)) {
         const value = textToEmoji[key];
