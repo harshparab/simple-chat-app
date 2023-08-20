@@ -35,10 +35,20 @@ document.addEventListener("DOMContentLoaded", () => {
       li.classList.add("received");
     }
 
+    let outputStr = data.message;
+
+    for (const key in textToEmoji) {
+      if (textToEmoji.hasOwnProperty(key)) {
+        const value = textToEmoji[key];
+        const regex = new RegExp(`\\b${key}\\b`, "gi");
+        outputStr = outputStr.replace(regex, value);
+      }
+    }
+
     const strong = document.createElement("strong");
     strong.textContent = data.username;
     const message = document.createElement("div");
-    message.textContent = data.message;
+    message.textContent = outputStr;
 
     li.appendChild(strong);
     li.appendChild(message);
