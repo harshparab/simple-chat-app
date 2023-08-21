@@ -1,0 +1,4 @@
+- name: simple-chat-app
+  type: web
+  buildCommand: npm install
+  startCommand: node server.js
