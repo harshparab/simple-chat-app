@@ -4,49 +4,31 @@ body {
     padding: 0;
 }
 
-#chat-container {
+.chat-container {
     max-width: 600px;
-    /* Adjust the max-width as needed */
     margin: 0 auto;
     display: flex;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-#user-list,
-#chat {
+.chat {
     flex: 1;
     padding: 20px;
     border: 1px solid #ddd;
 }
 
-#user-list {
-    border-right: none;
-    /* No border on the right side of user list */
-}
-
-#users {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-#users li {
-    margin-bottom: 5px;
-}
-
-#chat h2,
-#user-list h2 {
+.chat h2 {
     margin-top: 0;
     margin-bottom: 10px;
 }
 
-#messages {
+.messages {
     list-style: none;
     padding: 0;
 }
 
-#messages li {
+.messages li {
     font-size: 16px;
     padding: 10px;
     border-radius: 8px;
@@ -54,38 +36,37 @@ body {
 }
 
 
-#messages .sent {
+.messages .sent {
     background-color: #d3e9f8;
 }
 
-#messages .received {
+.messages .received {
     background-color: #f0f0f0;
 }
 
-#messages .received strong,
-#messages .random strong {
+.messages .received strong,
+.messages .random strong {
     display: block;
     font-weight: bold;
     margin-bottom: 5px;
 }
 
-#messages .received div {
+.messages .received div {
     margin-top: 5px;
 }
 
-#messages .random div {
+.messages .random div {
     font-style: italic;
     margin-top: 5px;
 }
 
-#messages .random {
+.messages .random {
     background-color: #d3e9f8;
 }
 
-#form {
+.form {
     display: flex;
     justify-content: center;
-    /* Allow form elements to wrap on small screens */
 }
 
 input {
@@ -93,7 +74,7 @@ input {
     width: 100%;
 }
 
-#form input[type="text"] {
+.form input[type="text"] {
     flex: 1;
     width: 100%;
     padding: 10px;
@@ -105,12 +86,10 @@ input {
     font-size: 16px;
     color: #333;
     margin-bottom: 10px;
-    /* Add spacing between input and button */
 }
 
-#form button {
+.form button {
     flex: none;
-    /* Prevent button from stretching */
     padding: 10px 20px;
     background-color: #007bff;
     border: none;
@@ -119,32 +98,74 @@ input {
     cursor: pointer;
 }
 
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.modal h2 {
+    margin-top: 0;
+}
+
+.modal input {
+    display: block;
+    padding: 10px;
+    margin: 10px auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: fit-content;
+}
+
+.modal button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.username-error {
+    color: red;
+    margin-top: 10px;
+}
+
+.command-modal .modal-content {
+    text-align: left;
+}
+
 /* Responsive design */
 @media screen and (max-width: 480px) {
-    #chat-container {
+    .chat-container {
         max-width: 100%;
-        /* Allow chat container to take full width on small screens */
         border-radius: 0;
-        /* Remove border radius on small screens */
         flex-direction: column;
-        /* Stack user list and chat on top of each other */
     }
 
-    #user-list,
-    #chat {
+    .chat {
         border: none;
-        /* Remove borders on small screens */
         padding: 10px;
-        /* Add vertical padding for spacing */
     }
 
-    #user-list {
-        border-bottom: 1px solid #ddd;
-        /* Add bottom border to user list */
-    }
-
-    #form input[type="text"] {
+    .form input[type="text"] {
         margin-bottom: 0;
-        /* Remove spacing between input and button on small screens */
     }
 }
