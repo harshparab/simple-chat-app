@@ -8,7 +8,9 @@ const messages = document.querySelector(".messages");
 const modalContent = document.querySelector(".modal-content");
 const commandModal = document.querySelector(".command-modal");
 const closeModalButton = document.querySelector(".close-modal");
+const showLiveCount = document.querySelector(".show-live-count");
 let username = "";
+let userCount = 0;
 
 // Words to replace text with emoji
 const textToEmoji = {
@@ -20,6 +22,8 @@ const textToEmoji = {
   congratulations: "🎉",
 };
 
+const remObj = {};
+
 // Show the username modal
 usernameModal.style.display = "block";
 
@@ -27,8 +31,10 @@ usernameModal.style.display = "block";
 const userNameInputAndError = () => {
   username = modalInput.value.trim();
 
-  if (username !== "") {
+  if (username != "") {
     usernameModal.style.display = "none";
+    userCount += 1;
+    socket.emit("live user count", { userCount: userCount });
   } else {
     const usernameErr = document.createElement("div");
     usernameErr.classList.add("username-error");
@@ -37,31 +43,80 @@ const userNameInputAndError = () => {
   }
 };
 
+// function for object creation for /rem
+const functionForObjectCreation = (givenStr) => {
+  const li = document.createElement("li");
+  li.classList.add("random");
+  const message = document.createElement("div");
+
+  const strArray = givenStr.split(" ");
+
+  if (strArray.length == 3) {
+    remObj[strArray[1]] = strArray[2];
+    message.textContent = "INFO: Data Saved Successfully";
+  } else if (strArray.length == 2) {
+    message.textContent = `${remObj[strArray[1]]}`;
+  } else {
+    message.textContent = "WARNING: Insufficent / Extra Values passed";
+  }
+
+  li.appendChild(message);
+  messages.appendChild(li);
+};
+
+const calculator = (givenStr) => {
+  const calcArray = givenStr.split(" ");
+
+  const li = document.createElement("li");
+  li.classList.add("random");
+  const message = document.createElement("div");
+
+  if (calcArray.length > 2) {
+    message.textContent = "WARNING: Spaces are not allowed!!";
+  } else {
+    let result = eval(calcArray[1]);
+    message.textContent = `Result: ${result}`;
+    result = 0;
+  }
+
+  li.appendChild(message);
+  messages.appendChild(li);
+};
+
+const slashCommands = (inputValue) => {
+  if (inputValue.toLocaleLowerCase().includes("help")) {
+    console.log("Inside help", inputValue);
+    commandModal.style.display = "block";
+  } else if (inputValue.toLocaleLowerCase().includes("clear")) {
+    console.log("Inside clear", inputValue);
+    messages.innerHTML = "";
+  } else if (inputValue.toLocaleLowerCase().includes("random")) {
+    console.log("Inside random", inputValue);
+    const li = document.createElement("li");
+    li.classList.add("random");
+    const message = document.createElement("div");
+
+    message.textContent = `Your random number is ${Math.floor(
+      Math.random() * 10
+    )}`;
+
+    li.appendChild(message);
+    messages.appendChild(li);
+  } else if (inputValue.toLocaleLowerCase().includes("rem")) {
+    functionForObjectCreation(inputValue);
+  } else if (inputValue.toLocaleLowerCase().includes("calc")) {
+    calculator(inputValue);
+  } else {
+    console.log("Inside socket", inputValue);
+    socket.emit("chat message", { username, message: inputValue });
+  }
+};
+
 // To execute slash command and emit message to emit message
 const executeSlashCommandsAndEmitMessage = (eve) => {
   eve.preventDefault();
   if (input.value) {
-    if (input.value.toLocaleLowerCase() == "/help") {
-      commandModal.style.display = "block";
-    } else if (input.value.toLocaleLowerCase() == "/random") {
-      const li = document.createElement("li");
-      li.classList.add("random");
-      const strong = document.createElement("strong");
-      strong.textContent = username;
-      const message = document.createElement("div");
-
-      message.textContent = `Your random number is ${Math.floor(
-        Math.random() * 10
-      )}`;
-
-      li.appendChild(strong);
-      li.appendChild(message);
-      messages.appendChild(li);
-    } else if (input.value.toLocaleLowerCase() == "/clear") {
-      messages.innerHTML = "";
-    } else {
-      socket.emit("chat message", { username, message: input.value });
-    }
+    slashCommands(input.value);
     input.value = "";
   }
 };
@@ -87,14 +142,13 @@ const replaceWordsWithEmoji = (givenStr) => {
 socket.on("chat message", (data) => {
   const li = document.createElement("li");
 
-  if (data.username === username) {
+  if (data.username == username) {
     li.classList.add("sent");
   } else {
     li.classList.add("received");
   }
 
   const replacedWords = replaceWordsWithEmoji(data.message);
-
   const strong = document.createElement("strong");
   strong.textContent = data.username;
   const message = document.createElement("div");
@@ -104,6 +158,10 @@ socket.on("chat message", (data) => {
   li.appendChild(message);
 
   messages.appendChild(li);
+});
+
+socket.on("live user count", (data) => {
+  showLiveCount.innerHTML = data.userCount;
 });
 
 // All Event Listeners

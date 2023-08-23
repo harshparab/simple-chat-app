@@ -11,34 +11,36 @@
 </head>
 
 <body>
-    <div class="chat-container">
+    <section class="chat-container">
         <div class="chat">
-            <h2>Chats</h2>
+            <h2>Active Users: <span class="show-live-count">0</span></h2>
             <ul class="messages"></ul>
             <ul class="messages-to-user"></ul>
             <form class="form" action="">
                 <input class="input" autocomplete="off" /><button>Send</button>
             </form>
         </div>
-    </div>
-    
-    <div class="username-modal modal">
+    </section>
+
+    <section class="username-modal modal">
         <div class="modal-content">
             <h3>Enter Your Username</h3>
             <input type="text" class="modal-input" />
             <button class="modal-button">Submit</button>
         </div>
-    </div>
+    </section>
 
-    <div class="command-modal modal">
+    <section class="command-modal modal">
         <div class="modal-content">
             <h2>Available Commands</h2>
             <p>/help - Show this message</p>
             <p>/random - Print a random number</p>
             <p>/clear - Clear the chat</p>
+            <p>/rem - takes key value pairs and returns value</p>
+            <p>/calc - performs arithmetic operations </p>
             <button class="close-modal">Close</button>
         </div>
-    </div>
+    </section>
 </body>
 
 </html>
